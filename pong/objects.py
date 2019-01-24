@@ -19,10 +19,10 @@ class Ball:
         if self.position.y <= config.BALL_SIZE:
             self.velocity.y = -self.velocity.y
         ##### Temporary code to allow bouncing off the sides #####
-        if self.position.x >= config.SCREEN_WIDTH - config.BALL_SIZE:
-            self.velocity.x = -self.velocity.x
-        if self.position.x <= config.BALL_SIZE:
-            self.velocity.x = -self.velocity.x
+        # if self.position.x >= config.SCREEN_WIDTH - config.BALL_SIZE:
+        #     self.velocity.x = -self.velocity.x
+        # if self.position.x <= config.BALL_SIZE:
+        #     self.velocity.x = -self.velocity.x
         ##### end of temporary code #####
 
 class Bat:

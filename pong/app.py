@@ -9,6 +9,7 @@ class App:
         pyxel.init(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
         self.ball = objects.Ball(20, 20, 2, 2) # initialise the ball instance
         self.bats = [objects.Bat(10, 10), objects.Bat(config.SCREEN_WIDTH - 10, 10)] # initialise two bats 
+        self.score = 0
         pyxel.run(self.update, self.draw)
 
     def update(self):
@@ -19,18 +20,29 @@ class App:
             if (bat.hitBox.x1 < self.ball.position.x < bat.hitBox.x2
             and bat.hitBox.y1 < self.ball.position.y < bat.hitBox.y2):
                 self.ball.velocity.x = -self.ball.velocity.x
+                self.score += 1 # if the bat is hit, update the score
+            # lose conditions
+            if self.ball.position.x >= config.SCREEN_WIDTH - config.BALL_SIZE:
+                self.score = 0
+            if self.ball.position.x <= config.BALL_SIZE:
+                self.score = 0
         if pyxel.btnp(pyxel.KEY_Q):
             """ If Q is pressed, quit the application """
             pyxel.quit()
+        if pyxel.btnp(pyxel.KEY_R):
+            """ Restart if R is pressed """
+            self.ball.position.x = config.SCREEN_WIDTH / 2
+            self.ball.position.y = 20
+            self.score = 0
     def draw(self):
         """ Clear the screen and redraw objects """
         pyxel.cls(0) # 0 is black in the 16 colour pallete
-        # below: draw the ball, 2 is the radius and 7 is the colour
+        # below: draw the ball
         pyxel.circ(
-            self.ball.position.x, # x starting point
-            self.ball.position.y, # y starting point
-            config.BALL_SIZE, # size of the ball
-            9 # color of the ball
+            self.ball.position.x,   # x starting point
+            self.ball.position.y,   # y starting point
+            config.BALL_SIZE,       # size of the ball
+            9                       # color of the ball
         )
         # below: draw the bats
         for bat in self.bats:
@@ -41,3 +53,15 @@ class App:
                 bat.hitBox.y2,
                 12
             )
+        pyxel.text(
+            config.SCREEN_WIDTH / 2,   # x-position of the text
+            config.SCREEN_HEIGHT / 12, # y position of the text
+            str(self.score),    # displayed text as string
+            7                   # text color
+        )
+        pyxel.text(
+            config.SCREEN_WIDTH / 2,
+            config.SCREEN_HEIGHT - 10,
+            str("q = Quit, r = Restart"),
+            7
+        )
